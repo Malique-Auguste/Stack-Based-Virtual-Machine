@@ -6,6 +6,7 @@ pub enum Opcode {
 
     POP,
     PUSH,
+    DUP,
 
     ADD,
     SUB,
@@ -49,26 +50,28 @@ impl From<u16> for Opcode {
         match o {
             0 => Opcode::HALT,
             1 => Opcode::LEN,
+
             2 => Opcode::POP,
             3 => Opcode::PUSH,
+            4 => Opcode::DUP,
 
-            4 => Opcode::ADD,
-            5 => Opcode::SUB,
-            6 => Opcode::MUL,
-            7 => Opcode::DIV,
-            8 => Opcode::MOD,
+            5 => Opcode::ADD,
+            6 => Opcode::SUB,
+            7 => Opcode::MUL,
+            8 => Opcode::DIV,
+            9 => Opcode::MOD,
 
-            9 => Opcode::CMP,
-            10 => Opcode::JMP,
-            11 => Opcode::JE,
-            12 => Opcode::JNE,
-            13 => Opcode::JG,
-            14 => Opcode::JL,
-            15 => Opcode::JGE,
-            16 => Opcode::JLE,
+            10 => Opcode::CMP,
+            11 => Opcode::JMP,
+            12 => Opcode::JE,
+            13 => Opcode::JNE,
+            14 => Opcode::JG,
+            15 => Opcode::JL,
+            16 => Opcode::JGE,
+            17 => Opcode::JLE,
 
-            17 => Opcode::STDIN,
-            18 => Opcode::STDOUT,
+            18 => Opcode::STDIN,
+            19 => Opcode::STDOUT,
 
             u16::MAX | _ => Opcode::ILG,
         }
@@ -81,26 +84,28 @@ impl From<Opcode> for u16 {
             Opcode::ILG => u16::MAX,
             Opcode::HALT => 0,
             Opcode::LEN => 1,
+
             Opcode::POP => 2,
             Opcode::PUSH => 3,
+            Opcode::DUP => 4,
 
-            Opcode::ADD => 4,
-            Opcode::SUB => 5,
-            Opcode::MUL => 6,
-            Opcode::DIV => 7,
-            Opcode::MOD => 8,
+            Opcode::ADD => 5,
+            Opcode::SUB => 6,
+            Opcode::MUL => 7,
+            Opcode::DIV => 8,
+            Opcode::MOD => 9,
 
-            Opcode::CMP => 9,
-            Opcode::JMP => 10,
-            Opcode::JE => 11,
-            Opcode::JNE => 12,
-            Opcode::JG => 13,
-            Opcode::JL => 14,
-            Opcode::JGE => 15,
-            Opcode::JLE => 16,
+            Opcode::CMP => 10,
+            Opcode::JMP => 11,
+            Opcode::JE => 12,
+            Opcode::JNE => 13,
+            Opcode::JG => 14,
+            Opcode::JL => 15,
+            Opcode::JGE => 16,
+            Opcode::JLE => 17,
 
-            Opcode::STDIN => 17,
-            Opcode::STDOUT => 18,
+            Opcode::STDIN => 18,
+            Opcode::STDOUT => 19,
         }
     }
 }

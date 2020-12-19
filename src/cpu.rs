@@ -27,7 +27,7 @@ impl CPU {
                 if e == "jumped" {
                     continue;
                 }
-                println!("{}", e);
+                println!("{} at instruction {} ({:?})", e, self.current_address, Opcode::decode(self.program[self.current_address]));
                 return;
             }
             self.current_address += 1;
@@ -40,6 +40,7 @@ impl CPU {
             Opcode::ILG => return Some("Illegal character".into()),
             Opcode::HALT => return Some("end".into()),
             Opcode::LEN => self.stack.push(self.stack.len() as i8),
+
             Opcode::POP => {
                 match self.stack.pop() {
                     Some(_) => (),
@@ -47,6 +48,15 @@ impl CPU {
                 };
             }
             Opcode::PUSH => self.stack.push(operand1),
+            Opcode::DUP => {
+                let temp = match self.stack.pop() {
+                    Some(val) => val,
+                    None => return Some("no character to pop".into())
+                };
+
+                self.stack.push(temp.clone());
+                self.stack.push(temp.clone());
+            }
 
             Opcode::ADD => {
                 let n1 = match self.stack.pop() {
