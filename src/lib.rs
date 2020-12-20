@@ -1,10 +1,13 @@
-pub mod cpu;
-pub mod instruction;
-pub mod frame;
+pub mod vm;
+pub mod assembler;
 
-use cpu::*;
-use instruction::*;
-use frame::*;
+use vm::cpu::*;
+use vm::frame::*;
+use vm::instruction::*;
+
+use assembler::lexer::*;
+use assembler::tokens::*;
+
 
 #[cfg(test)]
 mod test_instruction {
@@ -27,7 +30,7 @@ mod test_cpu {
     use super::*;
 
     #[test]
-    fn test_arithmetic() {
+    fn arithmetic() {
         let program = vec![
             Opcode::encode(Opcode::PUSH, 2, 0),
             Opcode::encode(Opcode::PUSH, 5, 0),
@@ -50,7 +53,7 @@ mod test_cpu {
     }
 
     #[test]
-    fn test_logic() {
+    fn logic() {
         let program = vec![
             Opcode::encode(Opcode::PUSH, 10, 0),
             Opcode::encode(Opcode::PUSH, 2, 0),
@@ -64,7 +67,7 @@ mod test_cpu {
     }
 
     #[test]
-    fn test_functions() {
+    fn functions() {
         let program = vec![
             Opcode::encode(Opcode::PUSH, 10, 0),
             Opcode::encode(Opcode::PUSH, 5, 0),
@@ -90,4 +93,35 @@ mod test_cpu {
         let mut cpu = CPU::new(program);
         assert_eq!(10, cpu.run().unwrap());
     }
+}
+
+#[cfg(test)]
+mod test_lexer {
+    use super::*;
+
+    #[test]
+    fn lex_single_line() {
+        let mut lexer = Lexer::new("PUSH 12");
+        lexer.lex();
+        assert_eq!(vec![
+                Token::new(TokenType::Str("PUSH".into()), 1),
+                Token::new(TokenType::Num(12), 1)
+            ], 
+            lexer.tokens);
+    }
+
+    #[test]
+    fn lex_multiple_lines() {
+        let mut lexer = Lexer::new("Start:\n PUSH 12\nPUSH 15");
+        lexer.lex();
+        assert_eq!(vec![
+                Token::new(TokenType::Identifier("Start".into()), 1),
+                Token::new(TokenType::Str("PUSH".into()), 2),
+                Token::new(TokenType::Num(12), 2),
+                Token::new(TokenType::Str("PUSH".into()), 3),
+                Token::new(TokenType::Num(15), 3)
+            ], 
+            lexer.tokens);
+    }
+
 }

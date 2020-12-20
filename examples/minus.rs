@@ -1,6 +1,6 @@
 extern crate stack_based_virtual_machine;
-use stack_based_virtual_machine::instruction::*;
-use stack_based_virtual_machine::cpu::*;
+use stack_based_virtual_machine::vm::instruction::*;
+use stack_based_virtual_machine::vm::cpu::*;
 
 fn main() {
     //Subtracts the user input from 120 until the difference < 0

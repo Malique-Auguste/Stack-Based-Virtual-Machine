@@ -1,5 +1,5 @@
-use crate::instruction::*;
-use crate::frame::*;
+use crate::vm::instruction::*;
+use crate::vm::frame::*;
 use std::io::{stdin, stdout, Write};
 
 pub struct CPU {
