@@ -1,8 +1,10 @@
 pub mod cpu;
 pub mod instruction;
+pub mod frame;
 
 use cpu::*;
 use instruction::*;
+use frame::*;
 
 #[cfg(test)]
 mod test_instruction {
@@ -44,8 +46,7 @@ mod test_cpu {
         ];
         let mut cpu = CPU::new(program);
 
-        cpu.run();
-        assert_eq!(3, cpu.stack[0]);
+        assert_eq!(3, cpu.run().unwrap());
     }
 
     #[test]
@@ -59,7 +60,34 @@ mod test_cpu {
         ];
         let mut cpu = CPU::new(program);
 
-        cpu.run();
-        assert_eq!(0, cpu.stack[0]);
+        assert_eq!(0, cpu.run().unwrap());
+    }
+
+    #[test]
+    fn test_functions() {
+        let program = vec![
+            Opcode::encode(Opcode::PUSH, 10, 0),
+            Opcode::encode(Opcode::PUSH, 5, 0),
+            Opcode::encode(Opcode::CALL, 3, 1),
+            Opcode::encode(Opcode::STDOUT, 0, 0),
+            Opcode::encode(Opcode::HALT, 1, 0),
+
+
+            //function that returns the largest number
+            Opcode::encode(Opcode::STORE, 0, 0),
+            Opcode::encode(Opcode::STORE, 1, 0),
+            Opcode::encode(Opcode::LOAD, 0, 0),
+            Opcode::encode(Opcode::LOAD, 1, 0),
+            Opcode::encode(Opcode::CMP, 0, 0),
+            Opcode::encode(Opcode::JL, 3, 1),
+            Opcode::encode(Opcode::LOAD, 0, 0),
+            Opcode::encode(Opcode::RETURN, 1, 0),
+
+            Opcode::encode(Opcode::LOAD, 1, 0),
+            Opcode::encode(Opcode::RETURN, 1, 0),
+        ];
+
+        let mut cpu = CPU::new(program);
+        assert_eq!(10, cpu.run().unwrap());
     }
 }

@@ -28,6 +28,11 @@ pub enum Opcode {
 
     STDIN,
     STDOUT,
+
+    LOAD,
+    STORE,
+    CALL,
+    RETURN
 }
 
 impl Opcode {
@@ -73,6 +78,11 @@ impl From<u16> for Opcode {
             18 => Opcode::STDIN,
             19 => Opcode::STDOUT,
 
+            20 => Opcode::LOAD,
+            21 => Opcode::STORE,
+            22 => Opcode::CALL,
+            23 => Opcode::RETURN,
+
             u16::MAX | _ => Opcode::ILG,
         }
     }
@@ -106,6 +116,11 @@ impl From<Opcode> for u16 {
 
             Opcode::STDIN => 18,
             Opcode::STDOUT => 19,
+
+            Opcode::LOAD => 20,
+            Opcode::STORE => 21,
+            Opcode::CALL => 22,
+            Opcode::RETURN => 23,
         }
     }
 }
