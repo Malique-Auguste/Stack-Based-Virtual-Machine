@@ -160,20 +160,28 @@ impl CPU {
 
             Opcode::JE => {
                 if self.zero_flag {
-                    if operand2 == 0 {
-                        self.current_address = operand1 as usize;
-                    } else {
+                    if operand2 == 2 {
+                        self.current_address -= operand1 as usize;
+                    }
+                    else if operand2 == 1 {
                         self.current_address += operand1 as usize;
+                    }
+                    else {
+                        self.current_address = operand1 as usize;
                     }
                     return Some("jumped".into());
                 }
             },
             Opcode::JNE => {
                 if !self.zero_flag {
-                    if operand2 == 0 {
-                        self.current_address = operand1 as usize;
-                    } else {
+                    if operand2 == 2 {
+                        self.current_address -= operand1 as usize;
+                    }
+                    else if operand2 == 1 {
                         self.current_address += operand1 as usize;
+                    }
+                    else {
+                        self.current_address = operand1 as usize;
                     }
                     return Some("jumped".into());
                 }
@@ -181,20 +189,28 @@ impl CPU {
 
             Opcode::JG => {
                 if self.sign_flag {
-                    if operand2 == 0 {
-                        self.current_address = operand1 as usize;
-                    } else {
+                    if operand2 == 2 {
+                        self.current_address -= operand1 as usize;
+                    }
+                    else if operand2 == 1 {
                         self.current_address += operand1 as usize;
+                    }
+                    else {
+                        self.current_address = operand1 as usize;
                     }
                     return Some("jumped".into());
                 }
             },
             Opcode::JL => {
                 if !self.sign_flag {
-                    if operand2 == 0 {
-                        self.current_address = operand1 as usize;
-                    } else {
+                    if operand2 == 2 {
+                        self.current_address -= operand1 as usize;
+                    }
+                    else if operand2 == 1 {
                         self.current_address += operand1 as usize;
+                    }
+                    else {
+                        self.current_address = operand1 as usize;
                     }
                     return Some("jumped".into());
                 }
@@ -202,21 +218,30 @@ impl CPU {
 
             Opcode::JGE => {
                 if self.sign_flag || self.zero_flag {
-                    if operand2 == 0 {
-                        self.current_address = operand1 as usize;
-                    } else {
+                    if operand2 == 2 {
+                        self.current_address -= operand1 as usize;
+                    }
+                    else if operand2 == 1 {
                         self.current_address += operand1 as usize;
+                    }
+                    else {
+                        self.current_address = operand1 as usize;
                     }
                     return Some("jumped".into());
                 }
             },
             Opcode::JLE => {
                 if !self.sign_flag || self.zero_flag {
-                    if operand2 == 0 {
-                        self.current_address = operand1 as usize;
-                    } else {
+                    if operand2 == 2 {
+                        self.current_address -= operand1 as usize;
+                    }
+                    else if operand2 == 1 {
                         self.current_address += operand1 as usize;
                     }
+                    else {
+                        self.current_address += operand1 as usize;
+                    }
+                   
                     return Some("jumped".into());
                 }
             },
@@ -273,11 +298,16 @@ impl CPU {
             Opcode::CALL => {
                 self.call_stack.push(Frame::new(self.current_address));
 
-                if operand2 == 0 {
-                    self.current_address = operand1 as usize;
-                } else {
+                if operand2 == 2 {
+                    self.current_address -= operand1 as usize;
+                }
+                else if operand2 == 1 {
                     self.current_address += operand1 as usize;
                 }
+                else {
+                    self.current_address = operand1 as usize;
+                }
+
                 return Some("jumped".into());
             },
 

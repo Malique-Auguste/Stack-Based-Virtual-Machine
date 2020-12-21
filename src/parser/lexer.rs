@@ -1,4 +1,4 @@
-use crate::assembler::tokens::*;
+use crate::parser::tokens::*;
 
 pub struct Lexer {
     source: Vec<char>,

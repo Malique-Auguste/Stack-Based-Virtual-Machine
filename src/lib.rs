@@ -1,12 +1,14 @@
 pub mod vm;
-pub mod assembler;
+pub mod parser;
 
 use vm::cpu::*;
 use vm::frame::*;
 use vm::instruction::*;
 
-use assembler::lexer::*;
-use assembler::tokens::*;
+use parser::assembler::*;
+use parser::reader::*;
+use parser::lexer::*;
+use parser::tokens::*;
 
 
 #[cfg(test)]
@@ -22,6 +24,13 @@ mod test_instruction {
 
         let instruction: u32 = Opcode::encode(opcode.clone(), 1, 2);
         assert_eq!((opcode, operand1, operand2), Opcode::decode(instruction));
+    }
+
+    #[test]
+    fn instruction_byte() {
+        let instruction = 0xb32 as u32;
+        println!("{}", instruction);
+        assert_eq!(instruction, Opcode::byte_array_to_instruction(Opcode::instruction_to_byte_array(instruction)));
     }
 }
 
@@ -124,4 +133,50 @@ mod test_lexer {
             lexer.tokens);
     }
 
+}
+
+#[cfg(test)]
+mod test_parsing {
+    use super::*;
+
+    #[test]
+    fn assemble() {
+        let tokens = vec![Token::new(TokenType::Identifier("Start".into()), 1),
+                Token::new(TokenType::Str("PUSH".into()), 2),
+                Token::new(TokenType::Num(12), 2),
+                Token::new(TokenType::Num(0), 2),
+                Token::new(TokenType::Str("PUSH".into()), 3),
+                Token::new(TokenType::Num(15), 3),
+                Token::new(TokenType::Num(0), 2),];
+
+        let code = vec![Opcode::encode(Opcode::PUSH, 12, 0),
+                Opcode::encode(Opcode::PUSH, 15, 0)];
+        let mut assembler = Assembler::new(tokens, "");
+        assembler.assemble();
+        
+        assert_eq!(code, assembler.output);
+    }
+
+    #[test]
+    fn write_to_file() {
+        let tokens = vec![Token::new(TokenType::Identifier("Start".into()), 1),
+                Token::new(TokenType::Str("PUSH".into()), 2),
+                Token::new(TokenType::Num(12), 2),
+                Token::new(TokenType::Num(0), 2),
+                Token::new(TokenType::Str("POP".into()), 3),
+                Token::new(TokenType::Num(0), 3),
+                Token::new(TokenType::Num(0), 3),];
+
+        let mut assembler = Assembler::new(tokens, "examples/test1.bin");
+        assembler.assemble();
+        assembler.write();
+    }
+
+    #[test]
+    fn read_from_file() {
+        let instructions = vec![Opcode::encode(Opcode::PUSH, 12, 0),
+                            Opcode::encode(Opcode::POP, 0, 0)];
+
+        assert_eq!(instructions, Reader::read("examples/test1.bin"));
+    }
 }
