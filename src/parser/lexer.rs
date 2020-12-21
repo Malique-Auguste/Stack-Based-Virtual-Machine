@@ -99,7 +99,7 @@ impl Lexer {
 
     pub fn get_char_type(input: char) -> CharType {
         match input {
-            'a'..='z' | 'A'..='Z' => CharType::Letter,
+            'a'..='z' | 'A'..='Z' | '_'=> CharType::Letter,
             '0'..='9' => CharType::Num,
             ':' => CharType::Colon,
             ',' => CharType::Comma,

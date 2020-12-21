@@ -165,9 +165,12 @@ mod test_parsing {
                 Token::new(TokenType::Num(0), 2),
                 Token::new(TokenType::Str("POP".into()), 3),
                 Token::new(TokenType::Num(0), 3),
-                Token::new(TokenType::Num(0), 3),];
+                Token::new(TokenType::Num(0), 3),
+                Token::new(TokenType::Str("HALT".into()), 4),
+                Token::new(TokenType::Num(0), 4),
+                Token::new(TokenType::Num(0), 4),];
 
-        let mut assembler = Assembler::new(tokens, "examples/test1.bin");
+        let mut assembler = Assembler::new(tokens, "binaries/test1.bin");
         assembler.assemble();
         assembler.write();
     }
@@ -175,8 +178,16 @@ mod test_parsing {
     #[test]
     fn read_from_file() {
         let instructions = vec![Opcode::encode(Opcode::PUSH, 12, 0),
-                            Opcode::encode(Opcode::POP, 0, 0)];
+                            Opcode::encode(Opcode::POP, 0, 0),
+                            Opcode::encode(Opcode::HALT, 0, 0)];
+        assert_eq!(instructions, Reader::read("binaries/test1.bin"));
+    }
 
-        assert_eq!(instructions, Reader::read("examples/test1.bin"));
+    #[test]
+    fn execute_file() {
+        let instructions = Reader::read("binaries/test1.bin");
+
+        let mut cpu = CPU::new(instructions);
+        cpu.run();
     }
 }

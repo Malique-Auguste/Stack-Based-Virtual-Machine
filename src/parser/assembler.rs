@@ -22,7 +22,7 @@ impl Assembler {
         let mut index = 0;
         loop {
             if let TokenType::Identifier(i) = self.source[index].token_type.clone() {
-                identifiers.insert(i, index);
+                identifiers.insert(i, index / 3);
                 self.source.remove(index);
                 continue;
             }

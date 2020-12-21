@@ -1,0 +1,12 @@
+PUSH        100     0
+STDOUT      0       0
+
+PUSH        62      0
+STDOUT      0       3
+POP         0       0
+
+STDIN       0       0
+CMP         0       0
+JG          1       0
+
+HALT        0       0
