@@ -19,7 +19,7 @@ mod test_instruction {
     #[test]
     fn operation_decode_encode() {
         let opcode: Opcode = 1.into();
-        let operand1: i8 = 1;
+        let operand1: i16 = 1;
         let operand2: i8 = 2;
 
         let instruction: u32 = Opcode::encode(opcode.clone(), 1, 2);

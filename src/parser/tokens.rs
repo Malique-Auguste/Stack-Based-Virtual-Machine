@@ -2,7 +2,7 @@
 pub enum TokenType {
     Identifier(String),
     Str(String),
-    Num(i8)
+    Num(i16)
 }
 
 #[derive(Debug, Clone, PartialEq)]

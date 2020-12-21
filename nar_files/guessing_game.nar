@@ -7,7 +7,6 @@ PUSH    62      0
 STDOUT  0       3
 POP     0       0
 
-STDOUT  0       0
 STDIN   0       0
 CMP     0       0
 POP     0       0
@@ -18,14 +17,14 @@ JNE     loop    0
 JE      end     0
 
 is_over:
-JG      4       1
+JGE     4       1
 PUSH    111     0
 STDOUT  0       1
 POP     0       0
 RETURN  0       0
 
 is_under:
-JL      4       1
+JLE     4       1
 PUSH    117     0
 STDOUT  0       1
 POP     0       0

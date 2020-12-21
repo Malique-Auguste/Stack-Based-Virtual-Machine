@@ -78,14 +78,14 @@ impl Lexer {
                         let c = Lexer::get_char_type(match self.peek(){
                             Some(c) => c,
                             None => {
-                                let num = self.source[current_index..end_index].iter().collect::<String>().parse::<i8>().unwrap();
+                                let num = self.source[current_index..end_index].iter().collect::<String>().parse::<i16>().unwrap();
                                 self.tokens.push(Token::new(TokenType::Num(num), self.line));
                                 break;
                             }
                         });
 
                         if c != CharType::Num {
-                            let num = self.source[current_index..end_index].iter().collect::<String>().parse::<i8>().unwrap();
+                            let num = self.source[current_index..end_index].iter().collect::<String>().parse::<i16>().unwrap();
                             self.tokens.push(Token::new(TokenType::Num(num), self.line));
                             break;
                         }

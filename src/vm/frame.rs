@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 pub struct Frame {
-    variables: HashMap<i8, i8>,
+    variables: HashMap<i16, i16>,
     pub return_address: usize
 }
 
@@ -10,11 +10,11 @@ impl Frame {
         Frame { variables: HashMap::new(), return_address }
     }
 
-    pub fn store(&mut self, key: i8, value: i8) {
+    pub fn store(&mut self, key: i16, value: i16) {
         self.variables.insert(key, value);
     }
 
-    pub fn load(&self, key: &i8) -> Option<&i8> {
+    pub fn load(&self, key: &i16) -> Option<&i16> {
         self.variables.get(key)
     }
 }

@@ -36,15 +36,15 @@ pub enum Opcode {
 }
 
 impl Opcode {
-    pub fn encode(opcode: Opcode, operand1: i8, operand2: i8) -> u32 {
-        (u16::from(opcode) as u32) << 16 | (operand1 as u32) << 8 | (operand2 as u32)
+    pub fn encode(opcode: Opcode, operand1: i16, operand2: i8) -> u32 {
+        (u8::from(opcode) as u32) << 24 | (operand1 as u32) << 16 | (operand2 as u32)
     }
 
-    pub fn decode(instruction: u32) -> (Opcode, i8, i8) {
-        let [opcode1, opcode2, operand1, operand2] = instruction.to_be_bytes();
+    pub fn decode(instruction: u32) -> (Opcode, i16, i8) {
+        let [opcode1, operand1_lower, operand1_upper, operand2] = instruction.to_be_bytes();
         (
-            Opcode::from((opcode1 as u16) << 8 | (opcode2 as u16)),
-            operand1 as i8,
+            Opcode::from(opcode1),
+            ((operand1_upper as u16) << 8 | operand1_lower as u16) as i16,
             operand2 as i8,
         )
     }
@@ -58,8 +58,8 @@ impl Opcode {
     }
 }
 
-impl From<u16> for Opcode {
-    fn from(o: u16) -> Opcode {
+impl From<u8> for Opcode {
+    fn from(o: u8) -> Opcode {
         match o {
             0 => Opcode::HALT,
             1 => Opcode::LEN,
@@ -91,15 +91,15 @@ impl From<u16> for Opcode {
             22 => Opcode::CALL,
             23 => Opcode::RETURN,
 
-            u16::MAX | _ => Opcode::ILG,
+            u8::MAX | _ => Opcode::ILG,
         }
     }
 }
 
-impl From<Opcode> for u16 {
-    fn from(v: Opcode) -> u16 {
+impl From<Opcode> for u8 {
+    fn from(v: Opcode) -> u8 {
         match v {
-            Opcode::ILG => u16::MAX,
+            Opcode::ILG => u8::MAX,
             Opcode::HALT => 0,
             Opcode::LEN => 1,
 

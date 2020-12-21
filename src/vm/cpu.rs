@@ -6,7 +6,7 @@ pub struct CPU {
     program: Vec<u32>,
     current_address: usize,
 
-    pub stack: Vec<i8>,
+    pub stack: Vec<i16>,
     pub call_stack: Vec<Frame>,
 
     zero_flag: bool,
@@ -25,7 +25,7 @@ impl CPU {
         }
     }
 
-    pub fn run(&mut self) -> Result<i8, String> {
+    pub fn run(&mut self) -> Result<i16, String> {
         loop {
             if let Some(e) = self.execute_instruction() {
                 if e == "jumped" {
@@ -49,7 +49,7 @@ impl CPU {
         match opcode {
             Opcode::ILG => return Some("Illegal character".into()),
             Opcode::HALT => return Some("halt".into()),
-            Opcode::LEN => self.stack.push(self.stack.len() as i8),
+            Opcode::LEN => self.stack.push(self.stack.len() as i16),
 
             Opcode::POP => {
                 match self.stack.pop() {
@@ -249,7 +249,7 @@ impl CPU {
             Opcode::STDIN => {
                 let mut c = String::new();
                 stdin().read_line(&mut c);
-                self.stack.push(match c.trim().parse::<i8>() {
+                self.stack.push(match c.trim().parse::<i16>() {
                     Ok(val) => val,
                     Err(e) => return Some(format!("Couldn't parse string, Err: {}", e)),
                 });

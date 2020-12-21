@@ -45,7 +45,7 @@ impl Assembler {
                     let operand2 = match self.source.remove(1).token_type {
                         TokenType::Identifier(_) => panic!("Identifier encountered as an operand: {:?}", self.source[1]),
                         TokenType::Str(s) => panic!("String encountered as 2nd operand: {:?}", self.source[1]),
-                        TokenType::Num(n) => n
+                        TokenType::Num(n) => n as i8
                     };
 
                     match self.source.remove(0).token_type {
@@ -58,12 +58,12 @@ impl Assembler {
                                         None => panic!("Identifier doesn't exist")
                                     };
 
-                                    self.output.push(Opcode::encode(opcode, *operand1 as i8, operand2))
+                                    self.output.push(Opcode::encode(opcode, *operand1 as i16, operand2))
                                 },
 
                                 Opcode::PUSH => {
                                     if s.len() > 1 { panic!("only a character can be pushed: {}", s); }
-                                    self.output.push(Opcode::encode(opcode, s.chars().next().unwrap() as u8 as i8, operand2))
+                                    self.output.push(Opcode::encode(opcode, s.chars().next().unwrap() as u16 as i16, operand2))
                                 },
 
                                 _ => panic!("Opcode cannot take string as an input: {:?}", opcode)
