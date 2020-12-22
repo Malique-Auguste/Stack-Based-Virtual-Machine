@@ -17,9 +17,6 @@ pub fn main() {
     assembler.write();
 
     let program: Vec<u32> = Reader::read("binaries/guessing_game.bin");
-    program.iter().for_each(|x|
-        println!("{:#?}", Opcode::decode(x.clone()))
-    );
 
     let mut cpu = CPU::new(program);
     cpu.run();

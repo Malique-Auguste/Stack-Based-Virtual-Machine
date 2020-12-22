@@ -42,7 +42,7 @@ impl Lexer {
 
             match char_type {
                 CharType::Comma | CharType::WhiteSpace | CharType::Return | CharType::Tab => continue,
-                CharType::Colon => panic!("Colon encountered outside of identifier"),
+                CharType::Colon => panic!("Colon encountered outside of identifier, Line: {}", self.line),
                 CharType::Illegal => panic!("Illegal character ({}) encountered at line: {}", self.source[current_index], self.line),
 
                 CharType::Newline => self.line += 1,
@@ -63,7 +63,7 @@ impl Lexer {
                             self.tokens.push(Token::new( TokenType::Identifier(self.source[current_index..end_index].iter().collect()), self.line ));
                             break;
                         }
-                        else if CharType::Letter != c {
+                        else if c != CharType::Letter && c != CharType::Num {
                             self.tokens.push(Token::new( TokenType::Str(self.source[current_index..end_index].iter().collect()), self.line ));
                             break;
                         }

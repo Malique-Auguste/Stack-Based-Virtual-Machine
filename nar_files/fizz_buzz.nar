@@ -1,0 +1,68 @@
+PUSH    0   0
+PUSH    0   0
+
+loop:
+    POP     0   0
+    PUSH    1   1
+    ADD     0   0
+    DUP     0   0
+    CALL    fizz_buzz   0
+
+    DUP     0   0
+    PUSH    100 0
+    CMP     0   0
+    JNE     8   2
+    HALT    0   0
+
+fizz_buzz:
+    STORE   1   0
+
+    LOAD    1   0
+    CALL    divisible_5 0
+    LOAD    1   0
+    CALL    divisible_3 0
+
+    ADD     0   0
+    JNE     4   1
+
+    POP     0   0
+    STDOUT  0   0
+    RETURN  0   0
+
+    PUSH    32  0
+    STDOUT  0   1
+    POP     0   0
+    POP     0   0
+    RETURN  0   0
+          
+    
+
+divisible_5:
+    PUSH    5   0
+    MOD     0   0
+    JNE     7   1
+    POP     0   0
+    PUSH    102 0
+    STDOUT  0   3
+    POP     0   0
+    PUSH    1   0
+    RETURN  0   0
+
+    POP     0   0
+    PUSH    0   0
+    RETURN  0   0
+
+divisible_3:
+    PUSH    3   0
+    MOD     0   0
+    JNE     7   1
+    POP     0   0
+    PUSH    98  0
+    STDOUT  0   3
+    POP     0   0
+    PUSH    1   0
+    RETURN  0   0
+
+    POP     0   0
+    PUSH    0   0
+    RETURN  0   0
