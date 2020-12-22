@@ -1,29 +1,22 @@
 extern crate stack_based_virtual_machine;
 use stack_based_virtual_machine::vm::instruction::*;
 use stack_based_virtual_machine::vm::cpu::*;
+use stack_based_virtual_machine::parser::lexer::*;
+use stack_based_virtual_machine::parser::assembler::*;
+use stack_based_virtual_machine::parser::reader::*;
 
-fn main() {
-    //Subtracts the user input from 120 until the difference < 0
-    let program = vec![
-        Opcode::encode(Opcode::PUSH, 120, 0),
+use std::fs::read_to_string;
 
-        Opcode::encode(Opcode::STDOUT, 0, 0),
-        Opcode::encode(Opcode::PUSH, 62, 0),        //62 is utf8 for right arrow
-        Opcode::encode(Opcode::STDOUT, 0, 3),
-        Opcode::encode(Opcode::POP, 0, 0),
+pub fn main() {
+    let file = read_to_string("nar_files/minus.nar").unwrap() as String;
+    let mut lexer = Lexer::new(file);
+    lexer.lex();
 
-        Opcode::encode(Opcode::PUSH, 32, 0),        //32 is utf8 for right arrow
-        Opcode::encode(Opcode::STDOUT, 0, 3),
-        Opcode::encode(Opcode::POP, 0, 0),
+    let mut assembler = Assembler::new(lexer.tokens, "binaries/minus.bin");
+    assembler.assemble();
+    assembler.write();
 
-        Opcode::encode(Opcode::STDIN, 0, 0),
-
-        Opcode::encode(Opcode::CMP, 0, 0),
-        Opcode::encode(Opcode::JG, 1, 0),
-
-        Opcode::encode(Opcode::HALT, 0, 0),
-    ];
+    let program = Reader::read("binaries/minus.bin");
     let mut cpu = CPU::new(program);
-
     cpu.run();
 }
